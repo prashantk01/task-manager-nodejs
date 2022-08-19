@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const validator = require('validator')
 
 mongoose.connect('mongodb://127.0.0.1:27017/task-manager-nodejs', {
     useNewUrlParser: true,
@@ -7,16 +8,47 @@ mongoose.connect('mongodb://127.0.0.1:27017/task-manager-nodejs', {
 
 const User = mongoose.model('User', {
     name: {
-        type: String
+        type: String,
+        required: true,
+        trim: true
+    },
+    email: {
+        type: String,
+        required: true,
+        trim: true,
+        lowercase: true,
+        validate(value) {
+            if (!validator.isEmail(value)) {
+                throw new Error('Email is invalid')
+            }
+        }
+    },
+    password: {
+        type: String,
+        required: true,
+        minlength: 7,
+        trim: true,
+        validate(value) {
+            if (value.toLowerCase().includes('password')) {
+                throw new Error('Password cannot contain "password"')
+            }
+        }
     },
     age: {
-        type: Number
+        type: Number,
+        default: 0,
+        validate(value) {
+            if (value < 0) {
+                throw new Error('Age must be a postive number')
+            }
+        }
     }
 })
 
 // const me = new User({
-//     name: 'Prashant',
-//     age: '21'
+//     name: '   Prashant  ',
+//     email: 'MYEMAIL@MEAD.IO   ',
+//     password: 'phone098!'
 // })
 
 // me.save().then(() => {
@@ -27,16 +59,18 @@ const User = mongoose.model('User', {
 
 const Task = mongoose.model('Task', {
     description: {
-        type: String
+        type: String,
+        required: true,
+        trim: true
     },
     completed: {
-        type: Boolean
+        type: Boolean,
+        default: false
     }
 })
 
 const task = new Task({
-    description: 'Learn backend',
-    completed: false
+    description: '  Sleep time'
 })
 
 task.save().then(() => {
