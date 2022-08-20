@@ -8,49 +8,72 @@ const port = process.env.PORT || 3000
 app.use(express.json())
 
 
-app.post('/users', (req, res) => {
-    const user = req.body
-    const result = new User(user);
-    result.save().then(() => {
-        res.send(user)
-    }).catch((e) => {
-        res.status(400).send(e)
-    });
-})
-
-app.get('/tasks', (req, res) => {
-    Task.find({}).then((tasks) => {
-        console.log(tasks);
-        res.send(tasks)
-    }).catch((e) => {
+app.get('/users',  async (req, res) => {
+    try {
+        const users = await User.find({});
+        res.send(users)
+    }
+    catch (e) {
         res.status(500).send(e)
-    })
+    }
 })
 
-app.get('/task/:id', (req, res) => {
+app.get('/user/:id', async (req, res) => {
     const _id = req.params.id
-    Task.findById(_id).then((task) => {
+    try {
+        const user = await User.findById(_id);
+        if (!user)
+            res.send(404).send(user);
+        res.send(user)
+    } catch (e) {
+        res.status(500).send(e)
+    }
+})
+app.post('/users', async (req, res) => {
+    const user =  new User(req.body);
+    try {
+        await user.save()
+        res.send(user)
+    } catch (e) {
+         res.status(400).send(e)
+    }
+})
+
+app.get('/tasks', async (req, res) => {
+    try {
+        const tasks = await Task.find({});
+        res.send(tasks)
+    } catch (e) {
+        res.status(500).send(e)
+    }
+})
+
+app.get('/task/:id', async (req, res) => {
+    const _id = req.params.id
+
+    try {
+        const task = await Task.findById(_id);
         if (!task)
             res.send(404).send(task)
-        console.log(task);
         res.send(task)
-    }).catch((e) => {
+    } catch (e) {
         res.status(500).send(e)
-    })
+    }
 })
 
-app.post('/tasks', (req, res) => {
-    const task = new Task(req.body)
-    task.save().then(() => {
+app.post('/tasks', async (req, res) => {
+    const task =  new task(req.body);
+    try {
+       await  task.save()
         res.send(task)
-    }).catch((e) => {
-        res.status(400).send(e)
-    })
+    } catch (e) {
+         res.status(400).send(e)
+    }
 })
 
 
 app.get('/', (req, res) => {
-    res.send('hi postman')
+    res.send('welcome to task manager server')
 })
 
 
