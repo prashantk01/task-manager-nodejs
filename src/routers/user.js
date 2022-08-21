@@ -13,6 +13,22 @@ router.post('/users', async (req, res) => {
     }
 })
 
+router.post('/user/login', async (req, res) => {
+    try {
+        const hashedPassword = await bcrypt.hash(req.body.password,8)
+        const user = await User.findOne({ email: req.body.email, password: hashedPassword });
+        if (!user) {
+            console.log('Please enter valid email/password')
+            res.status(404).send()
+        }
+        console.log('welcome back, you are logged in')
+        res.status(201).send(user)
+    }
+    catch (e) {
+        res.status(500).send(e)
+    }
+})
+
 router.get('/users', async (req, res) => {
     try {
         const users = await User.find({})
