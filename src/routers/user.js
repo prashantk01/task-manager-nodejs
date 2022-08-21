@@ -7,16 +7,18 @@ router.post('/users', async (req, res) => {
 
     try {
         await user.save()
-        res.status(201).send(user)
+        const token = await user.generateAuthToken()
+        res.status(201).send({ user, token })
     } catch (e) {
         res.status(400).send(e)
     }
 })
 
-router.post('/user/login', async (req, res) => {
+router.post('/users/login', async (req, res) => {
     try {
         const hashedPassword = await bcrypt.hash(req.body.password,8)
         const user = await User.findOne({ email: req.body.email, password: hashedPassword });
+        const token = await user.generateAuthToken()
         if (!user) {
             console.log('Please enter valid email/password')
             res.status(404).send()
