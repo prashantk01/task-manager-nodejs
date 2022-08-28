@@ -21,7 +21,7 @@ router.post('/users/login', async (req, res) => {
         const user = await User.findOne({ email: req.body.email, password: hashedPassword });
         const token = await user.generateAuthToken()
         if (!user) {
-            console.log('Please enter valid email/password')
+            console.log('Please enter valid email or password')
             res.status(404).send()
         }
         console.log('welcome back, you are logged in')
@@ -32,6 +32,9 @@ router.post('/users/login', async (req, res) => {
     }
 })
 
+/**
+ * @auth express middleware for authorization
+ */
 router.get('/users/me', auth, async (req, res) => {
     res.send(req.user)
 })
