@@ -1,2 +1,7 @@
 # task-manager-nodejs
-node.js based task manager application backend
+
+    Nodejs based task manager application platform (backend)
+    steps to build this project:
+    #   git clone <repo-link>
+    #   npm i
+    #   npm run dev
