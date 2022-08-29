@@ -18,6 +18,11 @@ const taskSchema = new mongoose.Schema({
     }
 })
 
-const Task = mongoose.model('Task', taskSchema )
+/**
+ * timestamps set true creates: createdAt and updatedAt schema fields and update time accordingly
+ */
+taskSchema.set("timestamps", true);
+
+const Task = mongoose.model('Task', taskSchema)
 
 module.exports = Task

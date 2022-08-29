@@ -17,7 +17,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/task-manager-nodejs', {
 // const user = {
 //     name: " xyz",
 //     email: "abc@gmail.com",
-//     password: "p@123",
+//     password: "pab@123",
 //     age: 21
 // };
 

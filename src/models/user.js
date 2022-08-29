@@ -87,6 +87,10 @@ userSchema.pre('remove', async function (next) {
     next()
 })
 
+/**
+ * timestamps set true creates: createdAt and updatedAt schema fields and update time accordingly
+ */
+userSchema.set("timestamps", true);
 
 const User = mongoose.model('User', userSchema);
 
