@@ -41,7 +41,7 @@ router.post('/users/logout',auth, async (req, res) => {
         res.status(200).send()
     }
     catch (e) {
-         res.status(500).send()
+         res.status(500).send(e)
 
     }
 })
@@ -56,7 +56,7 @@ router.post('/users/logoutAll',auth, async (req, res) => {
         res.status(200).send()
     }
     catch (e) {
-        res.status(500).send()
+        res.status(500).send(e)
     }
 })
 
@@ -65,22 +65,6 @@ router.post('/users/logoutAll',auth, async (req, res) => {
  */
 router.get('/users/me', auth, async (req, res) => {
     res.send(req.user)
-})
-
-router.get('/users/:id', async (req, res) => {
-    const _id = req.params.id
-
-    try {
-        const user = await User.findById(_id)
-
-        if (!user) {
-            return res.status(404).send()
-        }
-
-        res.send(user)
-    } catch (e) {
-        res.status(500).send()
-    }
 })
 
 router.put('/users/me', auth, async (req, res) => {
@@ -115,7 +99,7 @@ router.delete('/users/me', auth, async (req, res) => {
         await req.user.remove();
         res.send(req.user)
     } catch (e) {
-        res.status(500).send()
+        res.status(500).send(e)
     }
 })
 
