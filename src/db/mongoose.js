@@ -5,12 +5,17 @@ const User = require("./../models/user");
 /**
  * connectin to db with provided url
  */
-mongoose.connect(process.env.MONGODB_URL, {
+let MONGODB_URL = "";
+if (process.env.NODE_ENV === "test")
+    MONGODB_URL = process.env.MONGODB_URL_TEST
+else 
+    MONGODB_URL = process.env.MONGODB_URL
+mongoose.connect(MONGODB_URL, {
     useNewUrlParser: true,
     // below code is unsupported for vmongodb > 6
     // useCreateIndex: true 
 }).then(() => {
-    console.log("database connected !! ")
+    console.log("database connected !!")
 }).catch((e) => {
     console.log("database connection error: "+e)
 })
