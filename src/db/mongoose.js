@@ -8,7 +8,7 @@ const User = require("./../models/user");
 let MONGODB_URL = "";
 if (process.env.NODE_ENV === "test")
     MONGODB_URL = process.env.MONGODB_URL_TEST
-else 
+else
     MONGODB_URL = process.env.MONGODB_URL
 mongoose.connect(MONGODB_URL, {
     useNewUrlParser: true,
@@ -17,15 +17,5 @@ mongoose.connect(MONGODB_URL, {
 }).then(() => {
     console.log("database connected !!")
 }).catch((e) => {
-    console.log("database connection error: "+e)
+    console.log("database connection error: " + e)
 })
-
-// const user = {
-//     name: " xyz",
-//     email: "abc@gmail.com",
-//     password: "pab@123",
-//     age: 21
-// };
-
-// new User(user).save();
-// // user.generateAuthToken();
