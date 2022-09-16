@@ -4,10 +4,11 @@ const router = new express.Router()
 const auth = require('../middleware/auth')
 const multer = require('multer')
 const sharp = require('sharp')
+const bcrypt = require('bcryptjs')
 const { sendWelcomeEmail, sendCancelationEmail } = require('./../config/emails/email')
 
 
-router.post('/users', async (req, res) =>{
+router.post('/users', async (req, res) => {
     const user = new User(req.body)
 
     try {
@@ -30,14 +31,14 @@ router.post('/users/login', async (req, res) => {
             res.status(404).send()
         }
         console.log('welcome back, you are logged in')
-        res.status(201).send({user, token})
+        res.status(201).send({ user, token })
     }
     catch (e) {
         res.status(500).send(e)
     }
 })
 
-router.post('/users/logout',auth, async (req, res) => {
+router.post('/users/logout', auth, async (req, res) => {
     try {
         req.user.tokens = req.user.tokens.filter((token) => {
             return token.token !== req.token
@@ -46,7 +47,7 @@ router.post('/users/logout',auth, async (req, res) => {
         res.status(200).send()
     }
     catch (e) {
-         res.status(500).send(e)
+        res.status(500).send(e)
 
     }
 })
@@ -54,7 +55,7 @@ router.post('/users/logout',auth, async (req, res) => {
 /**
  * this methods logout current user from all logged in sessions
  */
-router.post('/users/logoutAll',auth, async (req, res) => {
+router.post('/users/logoutAll', auth, async (req, res) => {
     try {
         req.user.tokens = []
         await req.user.save()
@@ -100,7 +101,7 @@ router.delete('/users/me', auth, async (req, res) => {
         // if (!user) {
         //     return res.status(404).send()
         // }
-        
+
         await req.user.remove();
         sendCancelationEmail(req.user.email, req.user.name)
         res.send(req.user)
