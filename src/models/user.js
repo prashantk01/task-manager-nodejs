@@ -5,18 +5,16 @@ const jwt = require('jsonwebtoken')
 const Task = require('../models/task')
 require('dotenv').config()
 
-
+mongoose.Schema.Types.String.set("trim", true);
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
-        trim: true
     },
     email: {
         type: String,
         required: true,
         unique: true,
-        trim: true,
         lowercase: true,
         validate(value) {
             if (!validator.isEmail(value)) {
@@ -28,7 +26,6 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         minlength: 7,
-        trim: true,
         validate(value) {
             if (value.toLowerCase().includes('password')) {
                 throw new Error('Password cannot contain "password"')

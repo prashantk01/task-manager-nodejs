@@ -1,11 +1,11 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
 
+mongoose.Schema.Types.String.set("trim", true);
 const taskSchema = new mongoose.Schema({
     description: {
         type: String,
         required: true,
-        trim: true
     },
     completed: {
         type: Boolean,
