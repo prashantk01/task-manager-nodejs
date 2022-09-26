@@ -23,8 +23,12 @@ router.post('/users', async (req, res) => {
 
 router.post('/users/login', async (req, res) => {
     try {
-        const hashedPassword = await bcrypt.hash(req.body.password, 8)
-        const user = await User.findOne({ email: req.body.email, password: hashedPassword });
+        const user = await User.findOne({ email: req.body.email });
+        if (!user || !await bcrypt.compare(req.body.password, user.password)) {
+            res.status(404).send({
+                data: "User not found or Incorrect Password"
+            })
+        }
         const token = await user.generateAuthToken()
         if (!user) {
             console.log('Please enter valid email or password')
